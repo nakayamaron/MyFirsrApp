@@ -2,7 +2,6 @@ const express = require('express');
 const mongoose = require('mongoose');
 const config = require("./config/dev");
 const FakeDb = require("./fake-db");
-
 const productRoutes = require('./routes/products')
 
 mongoose.connect(config.DB_URL, {
