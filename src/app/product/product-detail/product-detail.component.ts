@@ -1,29 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-// import { products } from '../../products';
-
-export const products = [
-  {
-    name: 'Phone XL',
-    price: 799,
-    description: 'A large phone with one of the best screens'
-  },
-  {
-    name: 'Phone Mini',
-    price: 699,
-    description: 'A great phone with one of the best cameras'
-  },
-  {
-    name: 'Phone Standard',
-    price: 299,
-    description: ''
-  },
-  {
-    name: 'Phone Special',
-    price: 999,
-    description: ''
-  }
-];
+import { ProductService } from '../shared/product.service';
 
 @Component({
   selector: 'app-product-detail',
@@ -33,11 +10,24 @@ export const products = [
 export class ProductDetailComponent implements OnInit {
   product
 
-  constructor(private route : ActivatedRoute) { }
+  constructor(
+    private route : ActivatedRoute,
+    private productService: ProductService
+    ) { }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
-      this.product = products[+params.get('productId')]
+      // this.product =this.productService.getProductById(params.get('productId'));
+      const productObservable = this.productService.getProductById(params.get('productId'));
+
+      productObservable.subscribe(
+        (data) => {
+          this.product = data;
+        },
+        (err) => {
+          console.log("エラーが発生しました。");
+        },
+      )
     })
   }
 

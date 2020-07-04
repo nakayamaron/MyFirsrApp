@@ -1,41 +1,27 @@
 import { Component, OnInit } from '@angular/core';
+import { ProductService } from '../shared/product.service';
 
-export const products = [
-  {
-    name: 'Phone XL',
-    price: 799,
-    description: 'A large phone with one of the best screens'
-  },
-  {
-    name: 'Phone Mini',
-    price: 699,
-    description: 'A great phone with one of the best cameras'
-  },
-  {
-    name: 'Phone Standard',
-    price: 299,
-    description: ''
-  },
-  {
-    name: 'Phone Special',
-    price: 999,
-    description: ''
-  }
-];
 
 @Component({
   selector: 'app-product-list',
   templateUrl: './product-list.component.html',
-  styleUrls: ['./product-list.component.scss']
+  styleUrls: ['./product-list.component.scss'],
 })
 export class ProductListComponent implements OnInit {
+  products;
 
-  products
-
-  constructor() { }
+  constructor(private productService: ProductService) {}
 
   ngOnInit(): void {
-    this.products = products;
-  }
+    const productObservable = this.productService.getProducts();
 
+    productObservable.subscribe(
+      (data) => {
+        this.products = data;
+      },
+      (err) => {
+        console.log("エラーが発生しました。");
+      },
+      )
+  }
 }
